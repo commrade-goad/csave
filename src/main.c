@@ -90,7 +90,7 @@ int main (int argc, char** argv) {
                 testi.arr = realloc(testi.arr, sizeof(struct String) * testi.len);
                 testi.arr[n-1].len = strlen(something);
                 testi.arr[n-1].str = malloc(strlen(something));
-                strcpy(testi.arr[n-1].str, something);
+                strncpy(testi.arr[n-1].str, something, strlen(something));
                 n++;
 
             } else {
