@@ -11,6 +11,7 @@ ninja -C build
 ```sh
 ./build/csave write # to write
 ./build/csave read # to read
+./build/csave rw # to read and write
 ```
 
 ## THIS PROJECT IS STILL WIP
