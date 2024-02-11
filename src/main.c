@@ -115,13 +115,6 @@ void write_dialog(struct Data *testi, int is_alloc) {
     }
 }
 
-void cleanup(struct Data *data) {
-    for(int i = 0; i < data->len; i++) {
-        free(data->arr[i].str);
-    }
-    free(data->arr);
-}
-
 int main (int argc, char** argv) {
 
     if (argc < 2) {
@@ -140,12 +133,10 @@ int main (int argc, char** argv) {
     } else if (!strncmp(argv[1], "write", strlen("write"))) {
         struct Data result;
         write_dialog(&result, 0);
-        cleanup(&result);
     } else if (!strncmp(argv[1], "rw", strlen("rw"))) {
         struct Data result;
         read_file(PATH, &result);
         write_dialog(&result, 1);
-        cleanup(&result);
     }
     else {
         return 1;
