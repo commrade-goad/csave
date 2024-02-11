@@ -52,7 +52,7 @@ void write_dialog(struct Data *testi, int is_alloc) {
     if (is_alloc == 1) {
         n = testi->len;
     } else {
-        n = 1;
+        n = 0;
     }
     char something[1024];
     int tracker = 0;
@@ -109,9 +109,9 @@ void write_dialog(struct Data *testi, int is_alloc) {
             } else {
                 for (int i = idx; i < testi->len - 1;i++) {
                     testi->arr[i] = testi->arr[i+1];
-                    testi->len -= 1;
-                    testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
                 }
+                testi->len -= 1;
+                testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
             }
         } else {
             continue;
