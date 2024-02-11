@@ -85,7 +85,6 @@ void write_dialog(struct Data *testi, int is_alloc) {
             int len = strlen(something);
             testi->len = n;
             testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
-            // segfault at the line bellow
             testi->arr[n-1].len = len + 1;
             testi->arr[n-1].str = malloc(len * sizeof(char));
             strncpy(testi->arr[n-1].str, something, len);
@@ -103,20 +102,24 @@ void write_dialog(struct Data *testi, int is_alloc) {
             }
             printf(" del : ");
             scanf("%d", &idx);
-            if (idx == testi->len - 1) {
-                testi->len -= 1;
-                testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
-            } else {
+            if (idx != testi->len - 1) {
                 for (int i = idx; i < testi->len - 1;i++) {
                     testi->arr[i] = testi->arr[i+1];
                 }
-                testi->len -= 1;
-                testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
             }
+            testi->len -= 1;
+            testi->arr = realloc(testi->arr, sizeof(struct String) * testi->len);
         } else {
             continue;
         }
     }
+}
+
+void cleanup(struct Data *data) {
+    for(int i = 0; i < data->len; i++) {
+        free(data->arr[i].str);
+    }
+    free(data->arr);
 }
 
 int main (int argc, char** argv) {
@@ -135,12 +138,14 @@ int main (int argc, char** argv) {
         }
         free(result.arr);
     } else if (!strncmp(argv[1], "write", strlen("write"))) {
-        struct Data testi;
-        write_dialog(&testi, 0);
+        struct Data result;
+        write_dialog(&result, 0);
+        cleanup(&result);
     } else if (!strncmp(argv[1], "rw", strlen("rw"))) {
         struct Data result;
         read_file(PATH, &result);
         write_dialog(&result, 1);
+        cleanup(&result);
     }
     else {
         return 1;
