@@ -3,7 +3,24 @@
 #include <string.h>
 #include "type.h"
 
+#define BUFF_SIZE 1024
 #define PATH "./data.bin"
+
+void encode_string(struct Data *data) {
+    for (int i = 0; i < data->len; i++) {
+        for (int j = 0; j < data->arr[i].len - 1; j++) {
+            data->arr[i].str[j] += 13;
+        }
+    }
+}
+
+void decode_string(struct Data *data) {
+    for (int i = 0; i < data->len; i++) {
+        for (int j = 0; j < data->arr[i].len - 1; j++) {
+            data->arr[i].str[j] -= 13;
+        }
+    }
+}
 
 
 FILE *load_file(char *path, char *mode) {
@@ -18,6 +35,7 @@ FILE *load_file(char *path, char *mode) {
 
 int write_file(char *path, struct Data data) {
     FILE *file = load_file(path, "wb");
+    encode_string(&data);
 
     fwrite(&data.len, sizeof(int), 1, file);
     for(int i = 0; i < data.len; i++) {
@@ -42,6 +60,7 @@ int read_file(char *path, struct Data *data) {
             fread(&data->arr[i].str[j], sizeof(char), 1, file);
         }
     }
+    decode_string(data);
 
     fclose(file);
     return 1;
@@ -54,7 +73,7 @@ void write_dialog(struct Data *testi, int is_alloc) {
     } else {
         n = 0;
     }
-    char something[1024];
+    char something[BUFF_SIZE];
     int tracker = 0;
     testi->len = n;
     if (is_alloc != 1) {
